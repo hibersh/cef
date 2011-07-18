@@ -9,6 +9,7 @@ Drupal.behaviors.cef = {
           $('[name="'+dependent+'"]').closest('.views-exposed-widget').toggle(dvalue == value);
         });
       });
+      $('[name="'+dependee+'"]').change();
     });
   }
 }
