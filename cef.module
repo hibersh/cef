@@ -15,7 +15,15 @@ function cef_form_views_exposed_form_alter(&$form, &$form_state, $form_id) {
   foreach ($dependencies as $id => $depend) {
     if (isset($depend['dependents'])) {
       foreach ($depend['dependents'] as $fname => $farray) {
-        $dependencies_map[$map[$id]][$map[$fname]] = $farray['options']['value_form'];
+        switch ($farray['options']['values_set']) {
+          case '1':
+            $values = array($farray['options']['value_form']);
+            break;
+          case '3':
+            $values = $farray['options']['values'];
+            break;
+        }
+        $dependencies_map[$map[$id]][$map[$fname]] = $values;
       }
     }
   }
