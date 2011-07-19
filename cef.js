@@ -15,6 +15,10 @@ Drupal.behaviors.cef = {
     $('.dependee').wrapAll('<div class="views-exposed-widgets dependee" />');
     $('.dependent').wrapAll('<div class="views-exposed-widgets dependent" />');
     $('.views-exposed-widget:not(.dependee,.dependent)').wrapAll('<div class="views-exposed-widgets other" />');
+    $.each($('.views-exposed-widget .form-select'), function() {
+      $(this).get(0).options[0].text = $(this).closest('.views-exposed-widget').children('label').text();
+      $(this).closest('.views-exposed-widget').children('label').remove();
+    });
   }
 }
 
