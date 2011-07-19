@@ -8,22 +8,27 @@ function cef_form_views_exposed_form_alter(&$form, &$form_state, $form_id) {
   $map = array();
   foreach ($form_state['view']->filter as $id => $handler) {
     if ($handler->can_expose() && $handler->is_exposed()) {
-      if (isset($handler->definition['field_name'])) $map[$handler->definition['field_name']] = $id;
+      if (isset($handler->definition['field_name'])) {
+        $map[$handler->definition['field_name']] = $id;
+      }
     }
   }
   $dependencies_map = array();
   foreach ($dependencies as $id => $depend) {
     if (isset($depend['dependents'])) {
       foreach ($depend['dependents'] as $fname => $farray) {
-        switch ($farray['options']['values_set']) {
-          case '1':
-            $values = array($farray['options']['value_form']);
-            break;
-          case '3':
-            $values = $farray['options']['values'];
-            break;
+        if (isset($map[$fname])) {
+          switch ($farray['options']['values_set']) {
+            case '1':
+              $values = array($farray['options']['value_form']);
+              break;
+
+            case '3':
+              $values = $farray['options']['values'];
+              break;
+          }
+          $dependencies_map[$map[$id]][$map[$fname]] = $values;
         }
-        $dependencies_map[$map[$id]][$map[$fname]] = $values;
       }
     }
   }
