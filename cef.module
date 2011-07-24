@@ -35,3 +35,25 @@ function cef_form_views_exposed_form_alter(&$form, &$form_state, $form_id) {
   drupal_add_js(drupal_get_path('module', 'cef') . '/cef.js');
   drupal_add_js(array('cef' => $dependencies_map), 'setting');
 }
+
+/**
+ * Implements hook_field_attach_form().
+ */
+function cef_field_attach_form($entity_type, $entity, &$form, &$form_state, $langcode) {
+  if (!$dependencies = conditional_fields_load_dependencies($entity_type, $form['#bundle'])) {
+    return;
+  }
+  if (!$langcode) {
+    $langcode = LANGUAGE_NONE;
+  }
+  foreach ($dependencies as $dependent => $dependency) {
+    if (isset($dependency['dependees'])) {
+      $form[$dependent][$langcode]['#options']['_none'] = $form[$dependent][$langcode]['#title'];
+      $form[$dependent][$langcode]['#title'] = '';
+      $form[$dependent]['#attributes']['class'][] = 'field-dependent';
+    }
+  }
+}
+
+
+
