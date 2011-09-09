@@ -1,7 +1,7 @@
 name = Conditional Exposed Form
 description = Conditional views exposed form.
 package = Other
-core = 7.x
+core = 6.x
 
 dependencies[] = conditional_fields
 dependencies[] = views

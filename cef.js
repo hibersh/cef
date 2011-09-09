@@ -1,13 +1,10 @@
-(function ($) {
-  
-Drupal.behaviors.cef = {
-  attach: function (context) {
+Drupal.behaviors.cef = function (context) {
     $.each(Drupal.settings.cef, function(dependee, dependents) {
       $('[name="'+dependee+'"]').change(function() {
         $(this).closest('.views-exposed-widget').addClass('dependee');
         var value = this.value;
         $.each(dependents, function(dependent, values) {
-          $('[name="'+dependent+'"]').closest('.views-exposed-widget').toggle($.inArray(value, values) != -1).addClass('dependent');
+          $('[name="'+dependent+'"]').closest('.views-exposed-widget').toggle(value in values).addClass('dependent');
         });
       });
       $('[name="'+dependee+'"]').change();
@@ -19,7 +16,4 @@ Drupal.behaviors.cef = {
       $(this).get(0).options[0].text = $(this).closest('.views-exposed-widget').children('label').text();
       $(this).closest('.views-exposed-widget').children('label').remove();
     });
-  }
 }
-
-})(jQuery);
