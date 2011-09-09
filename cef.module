@@ -23,5 +23,3 @@ function cef_form_views_exposed_form_alter(&$form, &$form_state) {
   drupal_add_js(array('cef' => $dependencies_map), 'setting');
 }
 
-
-
