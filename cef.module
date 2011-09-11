@@ -4,7 +4,7 @@
  * Implements hook_form_FORM_ID_alter().
  */
 function cef_form_views_exposed_form_alter(&$form, &$form_state) {
-  $dependencies = conditional_fields_load_data(array_shift($form_state['view']->filter['type']->value));
+  if (!empty($form_state['view']->filter['type']->value)) $dependencies = conditional_fields_load_data(array_shift($form_state['view']->filter['type']->value));
   $map = array();
   foreach ($form_state['view']->filter as $id => $handler) {
     if ($handler->is_exposed()) {
