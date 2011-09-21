@@ -12,27 +12,27 @@ function cef_form_views_exposed_form_alter(&$form, &$form_state) {
     foreach ($type['fields'] as $name => $field) {
       if ($field['type'] == 'content_taxonomy') $ct[$field['vid']] = $name;
     }
-  }
-  $map = array();
-  foreach ($form_state['view']->filter as $id => $handler) {
-    if ($handler->is_exposed()) {
-      switch ($handler->definition['group']) {
-        case 'Taxonomy':
-          $map[$ct[$handler->options['vid']]] = $handler->options['id'];
-          break;
-        case 'Content':
-          $map[$handler->definition['content_field_name']] = $handler->options['id'];
-          break;
+    $map = array();
+    foreach ($form_state['view']->filter as $id => $handler) {
+      if ($handler->is_exposed()) {
+        switch ($handler->definition['group']) {
+          case 'Taxonomy':
+            $map[$ct[$handler->options['vid']]] = $handler->options['id'] . ($handler->options['type'] == 'hierarchical_select' ? '[hsid]' : '');
+            break;
+          case 'Content':
+            $map[$handler->definition['content_field_name']] = $handler->options['id'] . ($handler->operator == 'between' ? '[min]' : '');
+            break;
+        }
       }
     }
-  }
-  $dependencies_map = array();
-  foreach ($dependencies as $depend) {
-    if (isset($map[$depend['field_name']])) {
-      $dependencies_map[$map[$depend['control_field_name']]][$map[$depend['field_name']]] = $depend['trigger_values'];
+    $dependencies_map = array();
+    foreach ($dependencies as $depend) {
+      if (isset($map[$depend['field_name']])) {
+        $dependencies_map[$map[$depend['control_field_name']]][$map[$depend['field_name']]] = $depend['trigger_values'];
+      }
     }
+    drupal_add_js(array('cef' => $dependencies_map), 'setting');
+    drupal_add_js(drupal_get_path('module', 'cef') . '/cef.js');
   }
-  drupal_add_js(drupal_get_path('module', 'cef') . '/cef.js');
-  drupal_add_js(array('cef' => $dependencies_map), 'setting');
 }
 
