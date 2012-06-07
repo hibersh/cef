@@ -14,22 +14,19 @@ function cef_form_views_exposed_form_alter(&$form, &$form_state, $form_id) {
     }
   }
   $dependencies_map = array();
-  foreach ($dependencies as $id => $depend) {
-    if (isset($depend['dependents'])) {
-      foreach ($depend['dependents'] as $fname => $farray) {
-        if (isset($map[$fname])) {
-          switch ($farray['options']['values_set']) {
-            case '1':
-              $values = array($farray['options']['value_form']);
-              break;
+  foreach ($dependencies['dependents'] as $fname => $farray) {
+    if (isset($map[$fname])) {
+      $farray = reset($farray);
+      switch ($farray['options']['values_set']) {
+        case '1':
+          $values = array($farray['options']['value_form']);
+          break;
 
-            case '3':
-              $values = $farray['options']['values'];
-              break;
-          }
-          $dependencies_map[$map[$id]][$map[$fname]] = $values;
-        }
+        case '3':
+          $values = $farray['options']['values'];
+          break;
       }
+      $dependencies_map[$map[$farray['dependee']]][$map[$fname]] = $values;
     }
   }
   drupal_add_js(drupal_get_path('module', 'cef') . '/cef.js');
