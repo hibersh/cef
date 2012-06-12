@@ -15,7 +15,6 @@ Drupal.behaviors.cef = {
     $('.dependee').wrapAll('<div class="views-exposed-widgets dependee" />');
     $('.dependent').wrapAll('<div class="views-exposed-widgets dependent" />');
     $('.views-exposed-widget:not(.dependee,.dependent)').wrapAll('<div class="views-exposed-widgets other" />');
-    });
   }
 }
 
